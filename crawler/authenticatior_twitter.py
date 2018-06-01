@@ -7,7 +7,7 @@ BASE_URL = "https://api.twitter.com/1.1/search/tweets.json"
 
 class MyTwitterSearchClient(object):
     # dados que pegamos na conta de deselvolvedor do twitter, única para cada API
-    API_KEY = "NRuFvl2KkWxJ7tgvi29drHYkp""
+    API_KEY = "NRuFvl2KkWxJ7tgvi29drHYkp"
     API_SECRET = "9anREniBRp97JuqyGqQoFpVruQKYXBsW3PNZ8WpMMXVHFQqple"
     ACCESS_TOKEN = "164438391-QpOwVPRMF95I6qT73iftvg0p1K2w05D8HjFyjd5x"
     ACCESS_TOKEN_SECRET = "RHVB2ruH0l2Zl28A1LTYLiTGOZJmOfvfkPQnGT195d0EU"
@@ -26,7 +26,7 @@ class MyTwitterSearchClient(object):
             response = self.session.get(url)
             if response.status_code == 200:
                 tweets = json.loads(response.content)
-                oldest_id = min(<!-- Invalid tweet id --> for tweet in tweets['statuses']])-1
+                #oldest_id = min(<!-- Invalid tweet id --> for tweet in tweets['statuses'])-1
                 return tweets['statuses'] + \
-                       self.get_tweets(keyword, n - MAX_TWEETS, oldest_id)
+                       self.get_tweets(keyword, n-MAX_TWEETS, oldest_id)
         return []

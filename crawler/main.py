@@ -1,23 +1,37 @@
+# -*- coding: utf-8 -*-
 #Fazer rodar o crawler no modo multithread
+
 
 import threading
 from queue import Queue
-import spider
+from spider import Spider
 from domain import *
 from general import *
 from authenticatior_twitter import *
 from requests_oauthlib import OAuth1Session
+import requests
 #incializando a api do twitter
+import json
+
+API_KEY = "NRuFvl2KkWxJ7tgvi29drHYkp"
+API_SECRET = "9anREniBRp97JuqyGqQoFpVruQKYXBsW3PNZ8WpMMXVHFQqple"
+ACCESS_TOKEN = "164438391-QpOwVPRMF95I6qT73iftvg0p1K2w05D8HjFyjd5x"
+ACCESS_TOKEN_SECRET = "RHVB2ruH0l2Zl28A1LTYLiTGOZJmOfvfkPQnGT195d0EU"
 
 session = OAuth1Session(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-response = session.get('https://api.twitter.com/1.1/search/tweets.json?q=%23python') # %23 é o código para "#" na web e o que va ser buscado é guradado nessa variável q
+response = session.get('https://api.twitter.com/1.1/search/tweets.json?q=%23python')# %23 é o código para "#" na web e o que va ser buscado é guradado nessa variável q
+
 print (response.status_code)
-print(requests.utils.quote('#python')) #codifica os caracteres
+print (requests.utils.quote('#python')) #codifica os caracteres
+
 url =  "https://api.twitter.com/1.1/search/tweets.json?q=%s"
 url = url % (requests.utils.quote("#python"))
 response = session.get(url)
-tweets= json.loads(response.content) #serve para decodificar o conteúdo retornardo já que é uma string no fromato json
-print(tweets.keys())
+
+tweets_bytes = response.content.decode('utf8')
+
+tweets_json = json.loads(tweets_bytes) #serve para decodificar o conteúdo retornardo já que é uma string no fromato json
+print(tweets_json.keys())
 
 PROJECT_NAME = 'the crawler' #variável constante
 HOMEPAGE = 'https://twitter.com/'
@@ -26,7 +40,7 @@ QUEUE_FILE = PROJECT_NAME + '/queue.txt'
 CRAWLED_FILE = PROJECT_NAME + '/crawled.txt'
 NUMBER_OF_THREADS = 8
 queue = Queue()
-spider.Spider(PROJECT_NAME, HOMEPAGE, DOMAIN_NAME)
+spider=Spider(PROJECT_NAME, HOMEPAGE, DOMAIN_NAME)
 
 
 #create worker threads (will die when main exits)
